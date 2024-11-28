@@ -1,31 +1,36 @@
-const express = require('express');
+const express = require("express");
+const cors = require("cors");
 
 const app = express();
 
 app.use(express.json());
 
+// app uses cors
+
+app.use(cors());
+
 // Mock data
 
 let users = [
-  { id: 1, name: 'Alice', age: 25 },
-  { id: 2, name: 'Bob', age: 30 },
-  { id: 3, name: 'Charlie', age: 28 }
+  { id: 1, name: "Alice", age: 25 },
+  { id: 2, name: "Bob", age: 30 },
+  { id: 3, name: "Charlie", age: 28 },
 ];
 
 // GET all users
 
-app.get('/users', (req, res) => {
+app.get("/users", (req, res) => {
   res.json(users);
 });
 
 // GET user by ID
 
-app.get('/users/:id', (req, res) => {
+app.get("/users/:id", (req, res) => {
   const userId = parseInt(req.params.id);
-  const user = users.find(u => u.id === userId);
+  const user = users.find((u) => u.id === userId);
 
   if (!user) {
-    return res.status(404).json({ message: 'User not found' });
+    return res.status(404).json({ message: "User not found" });
   }
 
   res.json(user);
@@ -33,11 +38,11 @@ app.get('/users/:id', (req, res) => {
 
 // POST create user
 
-app.post('/users', (req, res) => {
+app.post("/users", (req, res) => {
   const newUser = {
     id: users.length + 1,
     name: req.body.name,
-    age: req.body.age
+    age: req.body.age,
   };
 
   users.push(newUser);
@@ -46,18 +51,18 @@ app.post('/users', (req, res) => {
 
 // PUT update user
 
-app.put('/users/:id', (req, res) => {
+app.put("/users/:id", (req, res) => {
   const userId = parseInt(req.params.id);
-  const userIndex = users.findIndex(u => u.id === userId);
+  const userIndex = users.findIndex((u) => u.id === userId);
 
   if (userIndex === -1) {
-    return res.status(404).json({ message: 'User not found' });
+    return res.status(404).json({ message: "User not found" });
   }
 
   const updatedUser = {
     id: userId,
     name: req.body.name || users[userIndex].name,
-    age: req.body.age || users[userIndex].age
+    age: req.body.age || users[userIndex].age,
   };
 
   users[userIndex] = updatedUser;
@@ -66,12 +71,12 @@ app.put('/users/:id', (req, res) => {
 
 // DELETE delete user
 
-app.delete('/users/:id', (req, res) => {
+app.delete("/users/:id", (req, res) => {
   const userId = parseInt(req.params.id);
-  const userIndex = users.findIndex(u => u.id === userId);
+  const userIndex = users.findIndex((u) => u.id === userId);
 
   if (userIndex === -1) {
-    return res.status(404).json({ message: 'User not found' });
+    return res.status(404).json({ message: "User not found" });
   }
 
   users.splice(userIndex, 1);
